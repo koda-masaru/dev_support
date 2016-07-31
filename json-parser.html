@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="bower/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="bower/font-awesome/css/font-awesome.min.css" />
+    <title>JSON Parser</title>
+</head>
+
+<body>
+    <div class="container">
+        <h2>
+            JSON Parser
+            <a href="index.html" class="btn btn-default">
+                <i class="fa fa-fa-reply" aria-hidden="true"></i> Back to Menu
+            </a>
+        </h2>
+        <div class="row">
+            <div class="col-xs-12 text-info" id="dropArea" style="outline: 1px solid orange;height:50px;padding-top:15px;">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i> 
+                Drag & Drop text file to this Area. (Only [*.txt])
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 text-warning" id="dropResult">
+            </div>
+        </div>
+        <br/>
+        
+        <div class="row">
+            <div class="col-xs-6" style="margin-bottom:10px;">
+                Input: 
+                <label>
+                    <input type="radio" name="jsonType" id="jsonTypeJson" value="json" checked> JSON
+                </label>
+                <label>
+                    <input type="radio" name="jsonType" id="jsonTypeJson5" value="json5"> JSON5
+                </label>
+                <button id="reset" class="btn btn-warning">
+                    <i class="fa fa-eraser" aria-hidden="true"></i> Reset
+                </button>
+            </div>
+            <div class="col-xs-6" style="margin-bottom:10px;">
+                Output: 
+                <label>
+                    <input type="radio" name="outType" id="outTypeJson" value="json" checked> JSON
+                </label>
+                <label>
+                    <input type="radio" name="outType" id="outTypeJson5" value="json5"> JSON5
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <textarea class="form-control" rows="13" id="json" placeholder="Input Text(JSON)"></textarea>
+            </div>
+            <div class="col-xs-6">
+                <textarea class="form-control" rows="13" id="parsed" readonly placeholder="Formatted JSON"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script src="bower/jquery/dist/jquery.min.js"></script>
+    <script src="bower/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower/json5/lib/json5.js"></script>
+
+    <script>
+        var parseJson = function () {
+            var jsonText = $('#json').val();
+            if (!jsonText) {
+                $('#parsed').val('');
+                return;
+            }
+            try {
+                var type = $('input[name=jsonType]:checked').val();
+                console.log(type);
+                var json;
+                if (type === 'json5') {
+                    json = JSON5.parse(jsonText);
+                } else {
+                    json = JSON.parse(jsonText);
+                }
+                console.log(json);
+                var out = $('input[name=outType]:checked').val();
+                if (out === 'json5') {
+                    $('#parsed').val(JSON5.stringify(json, null, '    '));
+                } else {
+                    $('#parsed').val(JSON.stringify(json, null, '    '));
+                }
+            } catch (e) {
+                $('#parsed').val(e);
+            }
+        };
+
+
+        $(document).ready(function () {
+            $('#json').keyup(function (e) {
+                parseJson();
+            });
+            $('#json').change(function () {
+                parseJson();
+            });
+            $('input[name=jsonType]').change(function () {
+                parseJson();
+            });
+            $('#reset').click(function() {
+                $('#json').val('');
+                parseJson();
+            });
+        });
+
+        // Drag & Drop
+        window.addEventListener("load", function () {
+            var drop = document.getElementById("dropArea");
+            drop.addEventListener("drop", function (event) {
+                event.preventDefault();
+                var filelist = event.dataTransfer.files;
+                for (var i = 0; i < filelist.length; i++) {
+                    if (window.FileReader && (filelist[i].type == "text/plain")) {
+                        var reader = new FileReader();
+                        reader.readAsText(filelist[i]);
+                        reader.onload = function (event) {　　　　　　
+                            $('#json').val($('#json').val() + event.target.result + '\n');
+                            parseJson();
+                        }
+                        drop.style.backgroundColor = "#FFF";
+                        $('#dropResult').html('');
+                    } else {
+                        $('#dropResult').html('<i class="fa fa-commenting-o" aria-hidden="true"></i>Drag & Drop can only [*.txt] : ' + filelist[i].name);
+                        drop.style.backgroundColor = "#ecc";
+                    }
+                }
+            }, true);
+            drop.addEventListener("dragenter", function (event) {
+                event.preventDefault();
+                drop.style.backgroundColor = "#ccc";
+            }, true);
+            drop.addEventListener("dragleave", function (event) {
+                event.preventDefault();
+                drop.style.backgroundColor = "#ccc";
+            }, true);
+            drop.addEventListener("dragover", function (event) {
+                event.preventDefault();
+            }, true);
+            window.addEventListener("drop", function (event) {
+                event.preventDefault();
+            }, true);
+            window.addEventListener("dragenter", function (event) {
+                event.preventDefault();
+            }, true);
+            window.addEventListener("dragleave", function (event) {
+                event.preventDefault();
+            }, true);
+            window.addEventListener("dragover", function (event) {
+                event.preventDefault();
+            }, true);
+
+        }, true);
+    </script>
+
+</body>
+
+</html>

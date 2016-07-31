@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="bower/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="bower/font-awesome/css/font-awesome.min.css" />
+    <title>Convert Upper / Lower</title>
+</head>
+
+<body>
+    <div class="container">
+        <h2>
+            Convert Upper / Lower
+            <a href="index.html" class="btn btn-default">
+                <i class="fa fa-fa-reply" aria-hidden="true"></i> Back to Menu
+            </a>
+        </h2>
+        <div class="row">
+            <div class="col-xs-12" style="margin-bottom:10px;">
+                <label>
+                    <input type="radio" name="convType" id="convTypeUpper" value="upper" checked> Upper
+                </label>
+                <label>
+                    <input type="radio" name="convType" id="convTypeLower" value="lower"> Lower
+                </label>
+                <button id="reset" class="btn btn-warning">
+                    <i class="fa fa-eraser" aria-hidden="true"></i> Reset
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <textarea class="form-control" rows="13" id="text" placeholder="Input Text"></textarea>
+            </div>
+            <div class="col-xs-6">
+                <textarea class="form-control" rows="13" id="result" readonly placeholder="Convert Result"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script src="bower/jquery/dist/jquery.min.js"></script>
+    <script src="bower/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower/json5/lib/json5.js"></script>
+
+    <script>
+        var convert = function () {
+            var text = $('#text').val();
+            if (!text) {
+                $('#result').val('');
+                return;
+            }
+            try {
+                var type = $('input[name=convType]:checked').val();
+                console.log(type);
+                if (type === 'lower') {
+                    $('#result').val(text.toLocaleLowerCase());
+                } else {
+                    $('#result').val(text.toLocaleUpperCase());
+                }
+            } catch (e) {
+                $('#result').val(e);
+            }
+        };
+
+        $(document).ready(function () {
+            $('#text').keyup(function (e) {
+                convert();
+            });
+            $('#text').change(function () {
+                convert();
+            });
+            $('input[name=convType]').change(function () {
+                convert();
+            });
+            $('#reset').click(function() {
+                $('#text').val('');
+                convert();
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>
