@@ -51,6 +51,16 @@
                 <label>
                     <input type="radio" name="outType" id="outTypeJson5" value="json5"> JSON5
                 </label>
+                
+                &nbsp;&nbsp;&nbsp;
+                <label>
+                    <input type="radio" name="format" id="format" value="format" checked> Format
+                </label>
+                <label>
+                    <input type="radio" name="format" id="unformat" value="unformat"> Un Format
+                </label>
+                
+                
             </div>
         </div>
         <div class="row">
@@ -85,10 +95,19 @@
                 }
                 console.log(json);
                 var out = $('input[name=outType]:checked').val();
+                var format = $('input[name=format]:checked').val();
                 if (out === 'json5') {
-                    $('#parsed').val(JSON5.stringify(json, null, '    '));
+                    if (format === 'unformat') {
+                        $('#parsed').val(JSON5.stringify(json));
+                    } else {
+                        $('#parsed').val(JSON5.stringify(json, null, '    '));
+                    }
                 } else {
-                    $('#parsed').val(JSON.stringify(json, null, '    '));
+                    if (format === 'unformat') {
+                        $('#parsed').val(JSON.stringify(json));
+                    } else {
+                        $('#parsed').val(JSON.stringify(json, null, '    '));
+                    }
                 }
             } catch (e) {
                 $('#parsed').val(e);
