@@ -7,13 +7,13 @@
 
     <link rel="stylesheet" href="bower/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="bower/font-awesome/css/font-awesome.min.css" />
-    <title>Convert Upper / Lower</title>
+    <title>URL Encode / Decode</title>
 </head>
 
 <body>
     <div class="container">
         <h2>
-            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Convert Upper / Lower
+            <i class="fa fa-globe" aria-hidden="true"></i> URL Encode / Decode
             <a href="index.html" class="btn btn-default">
                 <i class="fa fa-fa-reply" aria-hidden="true"></i> Back to Menu
             </a>
@@ -21,10 +21,16 @@
         <div class="row">
             <div class="col-xs-12" style="margin-bottom:10px;">
                 <label>
-                    <input type="radio" name="convType" id="convTypeUpper" value="upper" checked> Upper
+                    <input type="radio" name="convType" id="encodeURI" value="encodeURI" checked> encodeURI
                 </label>
                 <label>
-                    <input type="radio" name="convType" id="convTypeLower" value="lower"> Lower
+                    <input type="radio" name="convType" id="encodeURIComponent" value="encodeURIComponent"> encodeURIComponent
+                </label>
+                <label>
+                    <input type="radio" name="convType" id="decodeURI" value="decodeURI"> decodeURI
+                </label>
+                <label>
+                    <input type="radio" name="convType" id="decodeURIComponent" value="decodeURIComponent"> decodeURIComponent
                 </label>
                 <button id="reset" class="btn btn-warning">
                     <i class="fa fa-eraser" aria-hidden="true"></i> Reset
@@ -55,11 +61,19 @@
             try {
                 var type = $('input[name=convType]:checked').val();
                 console.log(type);
-                if (type === 'lower') {
-                    $('#result').val(text.toLocaleLowerCase());
+                var result = '';
+                if (type === 'encodeURI') {
+                    result = encodeURI(text);
+                } else if (type === 'encodeURIComponent') {
+                    result = encodeURIComponent(text);
+                } else if (type === 'decodeURI') {
+                    result = decodeURI(text);
+                } else if (type === 'decodeURIComponent') {
+                    result = decodeURIComponent(text);
                 } else {
-                    $('#result').val(text.toLocaleUpperCase());
+                    result = '';
                 }
+                $('#result').val(result);
             } catch (e) {
                 $('#result').val(e);
             }
